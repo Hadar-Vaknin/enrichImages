@@ -62,7 +62,7 @@ const main = async () => {
 
     const [array1, array2, array3, array4, array5, array6, array7 ] = splittedArray;
 
-    console.log(array1, array2, array3, array4, array5, array6, array7 )
+    console.log(array1, array2, array3, array4, array5, array6, array7)
     await Promise.allSettled([
     getImages(array1, config.pixabay.key1, images1),
     getImages(array2, config.pixabay.key2, images2),
@@ -70,10 +70,10 @@ const main = async () => {
     getImages(array4, config.pixabay.key4, images4),
     getImages(array5, config.pixabay.key5, images5),
     getImages(array6, config.pixabay.key6, images6),
-    getImages(array7, config.pixabay.key7, images7)
+    getImages(array7, config.pixabay.key7, images7),
     ]);
 
-    documents.images = [...images1, ...images2, ...images3, ...images4, ...images5, ...images6, ...images7];
+    documents.images = [...images1, ...images2, ...images3, ...images4, ...images5, ...images6, ...images7cd];
     documents.images = removeDuplicatesFromObjectsArray(documents.images);
     await saveContentToFile(documents, `${config.uploadImagesScript.path}/1.json`);
 }
