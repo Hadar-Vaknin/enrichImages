@@ -26,12 +26,16 @@ const searchImages = async (keyWord, key, imagesArray) => {
         const res = await axios.get(`${config.pixabay.url}?q=${keyWord}&key=${key}&per_page=${config.pixabay.imagesPerPage}&safesearch=true`);
         const imagesObj = res.data?.hits;
 
-        await Promise.allSettled(imagesObj.map(async (image) => {
-            const imageName = image.previewURL.split('/').pop();
-            await downloadImage(image.webformatURL, `${config.uploadImagesScript.path}/1/${imageName}`);
-            createDocForImage(image, imageName, imagesArray);
-        }));; 
+        for (const image of imagesObj) {
+            try {
+                const imageName = image.previewURL.split('/').pop();
+                await downloadImage(image.webformatURL, `${config.uploadImagesScript.path}/1/${imageName}`);
+                createDocForImage(image, imageName, imagesArray);
+            } catch (error) {
+                console.log(`Error in download image, image: ${image}`)
+            }
 
+        }
 
     } catch (error) {
         console.error(`Error while searching images, error: ${error}. waiting 1 min.`);
@@ -62,18 +66,27 @@ const main = async () => {
 
     const [array1, array2, array3, array4, array5, array6, array7 ] = splittedArray;
 
-    console.log(array1, array2, array3, array4, array5, array6, array7)
+    console.log(array1.length, array2.length, array3.length, array4.length, array5.length, array6.length, array7.length)
+
+    // await getImages(array1, config.pixabay.key1, images1),
+    // await getImages(array2, config.pixabay.key2, images2),
+    // await getImages(array3, config.pixabay.key3, images3),
+    // await getImages(array4, config.pixabay.key4, images4),
+    // await getImages(array5, config.pixabay.key5, images5),
+    // await getImages(array6, config.pixabay.key6, images6),
+    // await getImages(array7, config.pixabay.key7, images7),
+
     await Promise.allSettled([
-    getImages(array1, config.pixabay.key1, images1),
-    getImages(array2, config.pixabay.key2, images2),
-    getImages(array3, config.pixabay.key3, images3),
-    getImages(array4, config.pixabay.key4, images4),
-    getImages(array5, config.pixabay.key5, images5),
-    getImages(array6, config.pixabay.key6, images6),
-    getImages(array7, config.pixabay.key7, images7),
+        getImages(array1, config.pixabay.key1, images1),
+        getImages(array2, config.pixabay.key2, images2),
+        getImages(array3, config.pixabay.key3, images3),
+        getImages(array4, config.pixabay.key4, images4),
+        getImages(array5, config.pixabay.key5, images5),
+        getImages(array6, config.pixabay.key6, images6),
+        getImages(array7, config.pixabay.key7, images7),
     ]);
 
-    documents.images = [...images1, ...images2, ...images3, ...images4, ...images5, ...images6, ...images7cd];
+    documents.images = [...images1, ...images2, ...images3, ...images4, ...images5, ...images6, ...images7];
     documents.images = removeDuplicatesFromObjectsArray(documents.images);
     await saveContentToFile(documents, `${config.uploadImagesScript.path}/1.json`);
 }
