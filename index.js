@@ -29,7 +29,7 @@ const searchImages = async (keyWord, key, imagesArray) => {
         for (const image of imagesObj) {
             try {
                 const imageName = image.previewURL.split('/').pop();
-                await downloadImage(image.webformatURL, `${config.uploadImagesScript.path}/2/${imageName}`);
+                await downloadImage(image.webformatURL, `${config.uploadImagesScript.path}/3/${imageName}`);
                 createDocForImage(image, imageName, imagesArray);
             } catch (error) {
                 console.log(`Error in download image, image: ${image?.name} error:`, error);
@@ -45,7 +45,6 @@ const searchImages = async (keyWord, key, imagesArray) => {
 }
 
 const getImages = async (searchWords, key, imagesArray) => {
-
     for (const word of searchWords) {
         if(word[0] === '#') continue;
         console.log(word)
@@ -55,7 +54,7 @@ const getImages = async (searchWords, key, imagesArray) => {
 }
 
 const main = async () => {    
-    let randomSearchWords = await getSearchTerms('7000-20000.txt');
+    let randomSearchWords = await getSearchTerms('20000-40000.txt');
     const chunkSize = Math.ceil(randomSearchWords.length / 7); 
 
     const splittedArray = [];
@@ -70,16 +69,16 @@ const main = async () => {
     await Promise.allSettled([
         getImages(array1, config.pixabay.key1, images1),
         getImages(array2, config.pixabay.key2, images2),
-        getImages(array3, config.pixabay.key3, images3),
-        getImages(array4, config.pixabay.key4, images4),
-        getImages(array5, config.pixabay.key5, images5),
-        getImages(array6, config.pixabay.key6, images6),
-        getImages(array7, config.pixabay.key7, images7),
+         getImages(array3, config.pixabay.key3, images3),
+         getImages(array4, config.pixabay.key4, images4),
+         getImages(array5, config.pixabay.key5, images5),
+         getImages(array6, config.pixabay.key6, images6),
+         getImages(array7, config.pixabay.key7, images7),
     ]);
 
     documents.images = [...images1, ...images2, ...images3, ...images4, ...images5, ...images6, ...images7];
     documents.images = removeDuplicatesFromObjectsArray(documents.images);
-    await saveContentToFile(documents, `${config.uploadImagesScript.path}/2.json`);
+    await saveContentToFile(documents, `${config.uploadImagesScript.path}/3.json`);
 }
 
 main()
