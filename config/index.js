@@ -13,7 +13,8 @@ export const config = {
         key7: '34887295-5e97e17f921cf90fbf9e67964',
         imagesPerPage: 25
     },
-    uploadImagesScript: {
-        path: process.env.UPLOAD_IMAGES_PATH || '../uploadImages'
+    output: {
+        imagesDir: '../images4/4',
+        fileDir: '../images4/4.json'
     }
 }
